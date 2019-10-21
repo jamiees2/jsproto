@@ -1,0 +1,59 @@
+{
+  "name": "jsproto",
+  "version": "0.0.1",
+  "versionScheme": "~",
+  "description": "A a protobuf.js adapter for google-protobuf",
+  "author": "James Sigurdarson <dcode+protobufjs@dcode.io>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jamiees2/jsproto.git"
+  },
+  "bugs": "https://github.com/jamiees2/jsproto/issues",
+  "homepage": "https://github.com/jamiees2/jsproto",
+  "keywords": [
+    "protobuf",
+    "protocol-buffers",
+    "serialization",
+    "typescript"
+  ],
+  "main": "index.js",
+  "types": "index.d.ts",
+  "bin": {},
+  "scripts": {
+    "bench": "node bench",
+    "build": "gulp --gulpfile scripts/gulpfile.js"
+  },
+  "dependencies": {
+    "protobufjs": "git+https://github.com/jamiees2/protobuf.js.git#85035f68",
+    "@types/long": "^4.0.0",
+    "@types/node": "^10.1.0",
+    "long": "^4.0.0"
+  },
+  "devDependencies": {
+    "benchmark": "^2.1.4",
+    "browserify": "^16.2.3",
+    "browserify-wrap": "^1.0.2",
+    "bundle-collapser": "^1.3.0",
+    "chalk": "^2.4.1",
+    "glob": "^7.1.2",
+    "google-protobuf": "^3.5.0",
+    "gulp": "^4.0.0",
+    "gulp-header": "^2.0.5",
+    "gulp-if": "^2.0.1",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-uglify": "^3.0.0",
+    "uglify-js": "^3.3.25",
+    "vinyl-buffer": "^1.0.1",
+    "vinyl-fs": "^3.0.3",
+    "vinyl-source-stream": "^2.0.0"
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "package-lock.json",
+    "tsconfig.json",
+    "dist/**",
+    "src/**"
+  ]
+}
