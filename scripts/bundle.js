@@ -20,7 +20,7 @@ var pkg = require(path.join(__dirname, "..", "package.json"));
 /*eslint-disable no-template-curly-in-string*/
 var license = [
     "/*!",
-    " * jsproto v${version} (c) 2019",
+    " * jsproto v${version} (c) " + (new Date()).getFullYear().toString(),
     " * compiled ${date}",
     " * licensed under the MIT license",
     " * see: https://github.com/jamiees2/jsproto for details",

@@ -1,9 +1,9 @@
 {
   "name": "jsproto",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "versionScheme": "~",
   "description": "A a protobuf.js adapter for google-protobuf",
-  "author": "James Sigurdarson <dcode+protobufjs@dcode.io>",
+  "author": "James Sigurdarson <jamiees2@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
