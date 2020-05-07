@@ -14,7 +14,8 @@
         },
         "outer" : {
             "bool" : [ true, false, false, true, false, false, true ],
-            "double": 204.8
+            "double": 204.8,
+            "bytes": "YWJjZGVm"
         }
     },
     "float": 0.25

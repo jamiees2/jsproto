@@ -8,7 +8,7 @@
 // benchmark compares both pure string performance of JSON and additional binary conversion of the
 // same data using node buffers. Actual JSON performance on the network level should be somewhere
 // in between.
-
+var lodash = require("lodash");
 var payload   = require("../bench/data/bench.json");
 var Buffer_from = Buffer.from !== Uint8Array.from && Buffer.from || function(value, encoding) { return new Buffer(value, encoding); };
 
@@ -28,10 +28,11 @@ var jspbMsg = jspbCls.deserializeBinary(jspbBuf);
 var writer = new ProtoWriter();
 jspbCls.serializeBinaryToWriter(jspbMsg, writer);
 var buf = writer.getResultBuffer()
-console.log(buf)
+console.log(buf);
 
 var reader = new ProtoReader(jspbBuf);
 var instance = new jspbCls()
 jspbCls.deserializeBinaryFromReader(instance, reader);
 console.log(JSON.stringify(instance.toObject()))
+console.log("deserialize(serialize(payload)) === payload", lodash.isEqual(instance.toObject(), jspbMsg.toObject()))
 

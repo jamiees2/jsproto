@@ -35,6 +35,6 @@ message Outer {
 
     repeated bool bool = 1;
     double double = 2; // make sure to set something that's fair to JSON
+    bytes bytes = 3;
 }
 
-// bytes cannot be used

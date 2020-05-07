@@ -11,6 +11,31 @@ function writeSerialized(bytes, buf, pos) {
         buf[pos++] = bytes[i];
     }
 }
+function byteSourceToUint8Array(data) {
+  if (data.constructor === Uint8Array) {
+    return data;
+  }
+
+  if (data.constructor === ArrayBuffer) {
+    return new Uint8Array(data);
+  }
+
+  if (typeof Buffer != 'undefined' && data.constructor === Buffer) {
+    return new Uint8Array(data);
+  }
+
+  if (data.constructor === Array) {
+    return new Uint8Array(data);
+  }
+
+  if (data.constructor === String) {
+    var buf = new Uint8Array(utils.base64.length(value));
+    utils.base64.decode(value, buf, 0);
+    return buf;
+  }
+
+  return new Uint8Array(0);
+};
 ProtoWriter.prototype.writeSerializedMessage = function(bytes, start, end) {
     throw new Error("not supported")
     var bytes = bytes.subarray(start, end)
@@ -262,9 +287,9 @@ ProtoWriter.prototype.writeString = function(field, value) {
 };
 ProtoWriter.prototype.writeBytes = function(field, value) {
     if (value == null) return;
-    var bytes = jspb.utils.byteSourceToUint8Array(value);
+    var bytes = byteSourceToUint8Array(value);
     this.writeFieldHeader_(field, BinaryConstants.WireType.DELIMITED);
-    this._writer.bytes(value)
+    this._writer.bytes(bytes);
 };
 ProtoWriter.prototype.writeMessage = function(field, value, writerCallback) {
     if (value == null) return;
