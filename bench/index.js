@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 // NOTE: This benchmark partly compares apples and oranges in that it measures protocol buffers,
 // which is purely a binary format, and JSON, which is purely a string format.
@@ -9,103 +9,101 @@
 // same data using node buffers. Actual JSON performance on the network level should be somewhere
 // in between.
 
-var newSuite  = require("./suite"),
-    payload   = require("./data/bench.json");
-
-var Buffer_from = Buffer.from !== Uint8Array.from && Buffer.from || function(value, encoding) { return new Buffer(value, encoding); };
+const newSuite = require('./suite'),
+  payload = require('./data/bench.json');
 
 // protobuf.js dynamic: load the proto and set up a buffer
-var pbjsCls = require("protobufjs").loadSync(require.resolve("./data/bench.proto")).resolveAll().lookup("Test");
-var pbjsMsg = payload; // alt: pbjsCls.fromObject(payload);
-var pbjsBuf = pbjsCls.encode(pbjsMsg).finish();
+const pbjsCls = require('protobufjs')
+  .loadSync(require.resolve('./data/bench.proto'))
+  .resolveAll()
+  .lookup('Test');
+const pbjsMsg = payload; // alt: pbjsCls.fromObject(payload);
+const pbjsBuf = pbjsCls.encode(pbjsMsg).finish();
 
-var ProtoReader = require("..").ProtoReader
-var ProtoWriter = require("..").ProtoWriter
+const ProtoReader = require('..').ProtoReader;
+const ProtoWriter = require('..').ProtoWriter;
 
 // protobuf.js static: load the proto
-var pbjsStaticCls = require("./data/static_pbjs.js").Test;
+const pbjsStaticCls = require('./data/static_pbjs.js').Test;
 
 // JSON: set up a string and a buffer
-var jsonMsg = payload;
-var jsonStr = JSON.stringify(jsonMsg);
-var jsonBuf = Buffer_from(jsonStr, "utf8");
+const jsonMsg = payload;
+const jsonStr = JSON.stringify(jsonMsg);
+const jsonBuf = Buffer.from(jsonStr, 'utf8');
 
 // google-protobuf: load the proto, set up an Uint8Array and a message
-var jspbCls = require("./data/static_jspb.js").Test;
-var jspbBuf = new Uint8Array(Array.prototype.slice.call(pbjsBuf));
-var jspbMsg = jspbCls.deserializeBinary(jspbBuf);
+const jspbCls = require('./data/static_jspb.js').Test;
+const jspbBuf = new Uint8Array(Array.prototype.slice.call(pbjsBuf));
+const jspbMsg = jspbCls.deserializeBinary(jspbBuf);
 
-newSuite("encoding")
-
-.add("protobuf.js (reflect)", function() {
+newSuite('encoding')
+  .add('protobuf.js (reflect)', () => {
     pbjsCls.encode(pbjsMsg).finish();
-})
-.add("protobuf.js (static)", function() {
+  })
+  .add('protobuf.js (static)', () => {
     pbjsStaticCls.encode(pbjsMsg).finish();
-})
-.add("JSON (string)", function() {
+  })
+  .add('JSON (string)', () => {
     JSON.stringify(jsonMsg);
-})
-.add("JSON (buffer)", function() {
-    Buffer_from(JSON.stringify(jsonMsg), "utf8");
-})
-.add("google-protobuf", function() {
+  })
+  .add('JSON (buffer)', () => {
+    Buffer.from(JSON.stringify(jsonMsg), 'utf8');
+  })
+  .add('google-protobuf', () => {
     jspbMsg.serializeBinary();
-})
-.add("google-protobuf (protobufjs)", function() {
-    var writer = new ProtoWriter();
+  })
+  .add('google-protobuf (protobufjs)', () => {
+    const writer = new ProtoWriter();
     jspbCls.serializeBinaryToWriter(jspbMsg, writer);
-    writer.getResultBuffer()
-})
-.run();
+    writer.getResultBuffer();
+  })
+  .run();
 
-newSuite("decoding")
-
-.add("protobuf.js (reflect)", function() {
+newSuite('decoding')
+  .add('protobuf.js (reflect)', () => {
     pbjsCls.decode(pbjsBuf); // no allocation overhead, if you wondered
-})
-.add("protobuf.js (static)", function() {
+  })
+  .add('protobuf.js (static)', () => {
     pbjsStaticCls.decode(pbjsBuf);
-})
-.add("JSON (string)", function() {
+  })
+  .add('JSON (string)', () => {
     JSON.parse(jsonStr);
-})
-.add("JSON (buffer)", function() {
-    JSON.parse(jsonBuf.toString("utf8"));
-})
-.add("google-protobuf", function() {
+  })
+  .add('JSON (buffer)', () => {
+    JSON.parse(jsonBuf.toString('utf8'));
+  })
+  .add('google-protobuf', () => {
     jspbCls.deserializeBinary(jspbBuf);
-})
-.add("google-protobuf (protobufjs)", function() {
-    var reader = new ProtoReader(jspbBuf);
-    var instance = new jspbCls();
+  })
+  .add('google-protobuf (protobufjs)', () => {
+    const reader = new ProtoReader(jspbBuf);
+    const instance = new jspbCls();
     jspbCls.deserializeBinaryFromReader(instance, reader);
-})
-.run();
+  })
+  .run();
 
-newSuite("combined")
-
-.add("protobuf.js (reflect)", function() {
+newSuite('combined')
+  .add('protobuf.js (reflect)', () => {
     pbjsCls.decode(pbjsCls.encode(pbjsMsg).finish());
-})
-.add("protobuf.js (static)", function() {
+  })
+  .add('protobuf.js (static)', () => {
     pbjsStaticCls.decode(pbjsStaticCls.encode(pbjsMsg).finish());
-})
-.add("JSON (string)", function() {
+  })
+  .add('JSON (string)', () => {
     JSON.parse(JSON.stringify(jsonMsg));
-})
-.add("JSON (buffer)", function() {
-    JSON.parse(Buffer_from(JSON.stringify(jsonMsg), "utf8").toString("utf8"));
-})
-.add("google-protobuf", function() {
+  })
+  .add('JSON (buffer)', () => {
+    JSON.parse(Buffer.from(JSON.stringify(jsonMsg), 'utf8').toString('utf8'));
+  })
+  .add('google-protobuf', () => {
     jspbCls.deserializeBinary(jspbMsg.serializeBinary());
-})
-.add("google-protobuf (protobufjs)", function() {
-    var writer = new ProtoWriter();
+  })
+  .add('google-protobuf (protobufjs)', () => {
+    const writer = new ProtoWriter();
     jspbCls.serializeBinaryToWriter(jspbMsg, writer);
-    var buf = writer.getResultBuffer();
-    var reader = new ProtoReader(buf);
-    var instance = new jspbCls();
+    const buf = writer.getResultBuffer();
+    const reader = new ProtoReader(buf);
+    const instance = new jspbCls();
     jspbCls.deserializeBinaryFromReader(instance, reader);
-})
-.run();
+  })
+  .run();

@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 // NOTE: This benchmark partly compares apples and oranges in that it measures protocol buffers,
 // which is purely a binary format, and JSON, which is purely a string format.
@@ -8,31 +8,34 @@
 // benchmark compares both pure string performance of JSON and additional binary conversion of the
 // same data using node buffers. Actual JSON performance on the network level should be somewhere
 // in between.
-var lodash = require("lodash");
-var payload   = require("../bench/data/bench.json");
-var Buffer_from = Buffer.from !== Uint8Array.from && Buffer.from || function(value, encoding) { return new Buffer(value, encoding); };
+const lodash = require('lodash');
+const payload = require('../bench/data/bench.json');
 
-var ProtoReader = require("../src/index").ProtoReader
-var ProtoWriter = require("../src/index").ProtoWriter
+const ProtoReader = require('..').ProtoReader;
+const ProtoWriter = require('..').ProtoWriter;
 
 // protobuf.js dynamic: load the proto and set up a buffer
-var pbjsCls = require("protobufjs").loadSync(require.resolve("../bench/data/bench.proto")).resolveAll().lookup("Test");
-var pbjsMsg = payload; // alt: pbjsCls.fromObject(payload);
-var pbjsBuf = pbjsCls.encode(pbjsMsg).finish();
+const pbjsCls = require('protobufjs')
+  .loadSync(require.resolve('../bench/data/bench.proto'))
+  .resolveAll()
+  .lookup('Test');
+const pbjsMsg = payload; // alt: pbjsCls.fromObject(payload);
+const pbjsBuf = pbjsCls.encode(pbjsMsg).finish();
 // google-protobuf: load the proto, set up an Uint8Array and a message
-var jspbCls = require("../bench/data/static_jspb.js").Test;
-var jspbBuf = new Uint8Array(Array.prototype.slice.call(pbjsBuf));
-var jspbMsg = jspbCls.deserializeBinary(jspbBuf);
+const jspbCls = require('../bench/data/static_jspb.js').Test;
+const jspbBuf = new Uint8Array(Array.prototype.slice.call(pbjsBuf));
+const jspbMsg = jspbCls.deserializeBinary(jspbBuf);
 
-
-var writer = new ProtoWriter();
+const writer = new ProtoWriter();
 jspbCls.serializeBinaryToWriter(jspbMsg, writer);
-var buf = writer.getResultBuffer()
+const buf = writer.getResultBuffer();
 console.log(buf);
 
-var reader = new ProtoReader(jspbBuf);
-var instance = new jspbCls()
+const reader = new ProtoReader(jspbBuf);
+const instance = new jspbCls();
 jspbCls.deserializeBinaryFromReader(instance, reader);
-console.log(JSON.stringify(instance.toObject()))
-console.log("deserialize(serialize(payload)) === payload", lodash.isEqual(instance.toObject(), jspbMsg.toObject()))
-
+console.log(JSON.stringify(instance.toObject()));
+console.log(
+  'deserialize(serialize(payload)) === payload',
+  lodash.isEqual(instance.toObject(), jspbMsg.toObject())
+);

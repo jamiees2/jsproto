@@ -1,0 +1,17 @@
+import { BinaryReader, BinaryWriter } from 'google-protobuf';
+export declare type ByteSource = ArrayBuffer | Uint8Array | number[] | string;
+export declare type ScalarFieldType = boolean | number | string;
+export declare type RepeatedFieldType = ScalarFieldType[] | Uint8Array[];
+export declare type AnyFieldType = ScalarFieldType | RepeatedFieldType | Uint8Array;
+export declare type FieldValue = string | number | boolean | Uint8Array | FieldValueArray | undefined;
+declare type FieldValueArray = Array<FieldValue>;
+declare type AnyType = any;
+export declare type BinaryReadValue = AnyType;
+export declare type BinaryReadReader = (msg: BinaryReadValue, binaryReader: BinaryReader) => void;
+export declare type BinaryReadCallback = (reader: BinaryReader) => BinaryReadValue;
+export declare type BinaryWriteValue = AnyType;
+export declare type BinaryWriteCallback = (value: BinaryWriteValue, binaryWriter: BinaryWriter) => void;
+export declare type SplitType = object;
+export declare type SplitConverter = (hi: number, lo: number) => SplitType;
+export declare type SplitReverseConverter = (a: SplitType) => number;
+export {};
