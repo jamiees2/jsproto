@@ -21,7 +21,7 @@
   "types": "build/src/index.d.ts",
   "bin": {},
   "scripts": {
-    "bench": "node bench",
+    "bench": "npm run compile && node bench",
     "build": "gulp --gulpfile scripts/gulpfile.js",
     "lint": "gts lint",
     "clean": "gts clean",
