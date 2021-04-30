@@ -7,14 +7,14 @@ import ProtoWriter from './pbjs_writer';
 import * as BinaryConstants from './constants';
 import {ByteSource} from './types';
 
-type HasBinaryReader = {
+export type HasBinaryReader = {
   BinaryReader: BinaryReader;
 };
 
-type HasBinaryWriter = {
+export type HasBinaryWriter = {
   BinaryWriter: BinaryWriter;
 };
-type MessageClass<T> = {
+export type MessageClass<T> = {
   new (): T;
   deserializeBinary(buf: Uint8Array): T;
   deserializeBinaryFromReader(message: T, reader: BinaryReader): T;
