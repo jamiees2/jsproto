@@ -7,13 +7,6 @@ import ProtoWriter from './pbjs_writer';
 import * as BinaryConstants from './constants';
 import {ByteSource} from './types';
 
-export type HasBinaryReader = {
-  BinaryReader: BinaryReader;
-};
-
-export type HasBinaryWriter = {
-  BinaryWriter: BinaryWriter;
-};
 export type MessageClass<T> = {
   new (): T;
   deserializeBinary(buf: Uint8Array): T;
@@ -44,11 +37,11 @@ const exit = (jspb: OverridableClass, old: object) => {
 export const deserialize = <T extends Message>(
   protoClass: MessageClass<T>,
   data: ByteSource,
-  jspb: HasBinaryReader,
+  binaryReaderClass: object,
   useLong = false
 ) => {
   const old = enter(
-    <OverridableClass>(<unknown>jspb.BinaryReader),
+    <OverridableClass>(<unknown>binaryReaderClass),
     ProtoReader
   );
   try {
@@ -56,17 +49,17 @@ export const deserialize = <T extends Message>(
     const instance = new protoClass();
     return protoClass.deserializeBinaryFromReader(instance, reader);
   } finally {
-    exit(<OverridableClass>(<unknown>jspb.BinaryReader), old);
+    exit(<OverridableClass>(<unknown>binaryReaderClass), old);
   }
 };
 
 export const serialize = <T extends Message>(
   protoClass: MessageClass<T>,
   instance: T,
-  jspb: HasBinaryWriter
+  binaryWriterClass: object
 ) => {
   const old = enter(
-    <OverridableClass>(<unknown>jspb.BinaryWriter),
+    <OverridableClass>(<unknown>binaryWriterClass),
     ProtoWriter
   );
   try {
@@ -74,7 +67,7 @@ export const serialize = <T extends Message>(
     protoClass.serializeBinaryToWriter(instance, writer);
     return writer.getResultBuffer();
   } finally {
-    exit(<OverridableClass>(<unknown>jspb.BinaryWriter), old);
+    exit(<OverridableClass>(<unknown>binaryWriterClass), old);
   }
 };
 
