@@ -93,6 +93,10 @@ export default class ProtoReader implements BinaryReader {
     return false;
   }
 
+  isDelimited(): boolean {
+    return this.nextWireType == BinaryConstants.WireType.DELIMITED;
+  }
+
   setBlock(bytes?: ByteSource, start?: number, length?: number): void {
     this.reader = Reader.create(byteSourceToUint8Array(bytes ? bytes : ''));
     if (start) {
